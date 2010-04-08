@@ -26,6 +26,10 @@ Then inside the tach block you should specify the code you care about comparing.
 The output will show you the progress through each tach and average/total real times for each one when they finish.
 Each tach will be run all its repetitions in its own thread, with a new thread for each tach.
 
+BUT BUT, why does my progressbar take longer than the total time listed in the table?
+Well, displaying the progressbar is kinda slow, but that time doesn't count against the total for the tach.
+I'll be using tach to help me make it go faster, and then I'll (hopefully remember to) remove this notice!
+
 == Copyright
 
 (The MIT License)

@@ -19,15 +19,15 @@ module Tach
 
       Formatador.display_line
       longest = @benchmarks.map {|benchmark| benchmark[0]}.map {|name| name.length}.max
-      @benchmarks.each do |name, block|
-        @results[name] = run_in_thread("#{name}#{' ' * (longest - name.length)}", @times, block)
+      for name, block in @benchmarks
+        @results[name] = run_in_thread("#{name}#{' ' * (longest - name.length)}", @times, &block)
       end
 
       data = []
-      @benchmarks.each do |name, block|
+      for name, block in @benchmarks
         value = @results[name]
         total = value.inject(0) {|sum,item| sum + item}
-        data << { :average => format("%.5f", (total / value.length)), :tach => name, :total => format("%.5f", total) }
+        data << { :average => format("%8.6f", (total / value.length)), :tach => name, :total => format("%8.6f", total) }
       end
 
       Formatador.display_table(data, [:tach, :average, :total])
@@ -40,17 +40,24 @@ module Tach
 
     private
 
-    def run_in_thread(name, count, benchmark)
+    def run_in_thread(name, count, &benchmark)
+      if count.to_s.length > 3
+        divisor = 1
+        (count.to_s.length - 3).times do
+          divisor *= 10
+        end
+      end
       thread = Thread.new {
-        thread_start = Time.now
-        Formatador.redisplay_progressbar(0, count, :label => name, :started_at => thread_start)
-        count.times do |index|
+        Thread.current[:results] ||= []
+        Thread.current[:started_at] = Time.now
+        Formatador.redisplay_progressbar(0, count, :label => name, :started_at => Thread.current[:started_at])
+        for index in 1..count
           tach_start = Time.now
           instance_eval(&benchmark)
-          tach_elapsed = Time.now.to_f - tach_start.to_f
-          Thread.current[:results] ||= []
-          Thread.current[:results] << tach_elapsed
-          Formatador.redisplay_progressbar(index + 1, count, :label => name, :started_at => thread_start)
+          Thread.current[:results] << Time.now.to_f - tach_start.to_f
+          if !divisor || index % divisor == 0
+            Formatador.redisplay_progressbar(index, count, :label => name, :started_at => Thread.current[:started_at])
+          end
         end
         Formatador.display_line
       }
