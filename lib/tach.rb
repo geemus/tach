@@ -68,3 +68,21 @@ module Tach
   end
 
 end
+
+if __FILE__ == $0
+
+  data = 'Content-Length: 100'
+  Tach.meter(1_000_000) do
+
+    tach('regex') do
+      header = data.match(/(.*):\s(.*)/)
+      [$1, $2]
+    end
+
+    tach('split') do
+      header = data.split(': ')
+    end
+
+  end
+
+end
