@@ -41,27 +41,19 @@ module Tach
     private
 
     def run_in_thread(name, count, &benchmark)
-      if count.to_s.length > 3
-        divisor = 1
-        (count.to_s.length - 3).times do
-          divisor *= 10
-        end
-      end
-      thread = Thread.new {
+      Formatador.display_line(name)
+      thread = Thread.new do
         Thread.current[:results] = []
-        Thread.current[:started_at] = Time.now
-        Formatador.redisplay_progressbar(0, count, :label => name, :started_at => Thread.current[:started_at])
+        tach_start = Time.now
         for index in 1..count
-          tach_start = Time.now
           instance_eval(&benchmark)
-          Thread.current[:results] << Time.now.to_f - tach_start.to_f
-          if !divisor || index % divisor == 0
-            Formatador.redisplay_progressbar(index, count, :label => name, :started_at => Thread.current[:started_at])
-          end
         end
-        Formatador.display_line
-      }
+        GC::start
+        tach_finish = Time.now
+        Thread.current[:results] << tach_finish.to_f - tach_start.to_f
+      end
       thread.join
+      Formatador.display_line
       thread[:results]
     end
 
