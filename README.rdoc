@@ -1,8 +1,6 @@
 = tach
 
-Shotgun benchmarking with noticeable progress and pretty results.
-
-WARNING: this is still really rough and results may not be the best yet, working on it.
+Simple benchmarking with noticeable progress and pretty results.
 
 == Writing Benchmarks
 
@@ -20,15 +18,10 @@ Benchmarks are pretty easy, I'll explain a simple example
 
   end
 
-The optional argument to meter tells it how many times to run each tach (it defaults to 1).
-Each tach should have a name, so you can recognize them in the results.
+The optional argument to meter tells it how many times to run each tach (it defaults to 1)
+Each tach should have a name, so you can recognize them in the results
 Then inside the tach block you should specify the code you care about comparing.
-The output will show you the progress through each tach and average/total real times for each one when they finish.
-Each tach will be run all its repetitions in its own thread, with a new thread for each tach.
-
-BUT BUT, why does my progressbar take longer than the total time listed in the table?
-Well, displaying the progressbar is kinda slow, but that time doesn't count against the total for the tach.
-I'll be using tach to help me make it go faster, and then I'll (hopefully remember to) remove this notice!
+The name of each tach will be displayed as it starts
 
 == Copyright
 
