@@ -18,19 +18,11 @@ module Tach
       instance_eval(&block)
 
       Formatador.display_line
-      longest = @benchmarks.map {|benchmark| benchmark[0]}.map {|name| name.length}.max
-      for name, block in @benchmarks
-        @results[name] = run_in_thread("#{name}#{' ' * (longest - name.length)}", @times, &block)
-      end
-
       data = []
       for name, block in @benchmarks
-        value = @results[name]
-        total = value.inject(0) {|sum,item| sum + item}
-        data << { :average => format("%8.6f", (total / value.length)), :tach => name, :total => format("%8.6f", total) }
+        data << { :tach => name, :total => format("%8.6f", run_tach(name, @times, &block)) }
       end
-
-      Formatador.display_table(data, [:tach, :average, :total])
+      Formatador.display_table(data, [:tach, :total])
       Formatador.display_line
     end
 
@@ -40,21 +32,16 @@ module Tach
 
     private
 
-    def run_in_thread(name, count, &benchmark)
+    def run_tach(name, count, &benchmark)
+      GC::start
       Formatador.display_line(name)
-      thread = Thread.new do
-        Thread.current[:results] = []
-        tach_start = Time.now
-        for index in 1..count
-          instance_eval(&benchmark)
-        end
-        GC::start
-        tach_finish = Time.now
-        Thread.current[:results] << tach_finish.to_f - tach_start.to_f
+      tach_start = Time.now
+      for index in 1..count
+        instance_eval(&benchmark)
       end
-      thread.join
+      tach_finish = Time.now
       Formatador.display_line
-      thread[:results]
+      tach_finish - tach_start
     end
 
   end
