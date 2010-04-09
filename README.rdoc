@@ -2,9 +2,9 @@
 
 Shotgun benchmarking with noticeable progress and pretty results.
 
-== Writing Benchmarks
+WARNING: this is still really rough and results may not be the best yet, working on it.
 
-== Note on Patches/Pull Requests
+== Writing Benchmarks
 
 Benchmarks are pretty easy, I'll explain a simple example
 

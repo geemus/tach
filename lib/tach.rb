@@ -48,7 +48,7 @@ module Tach
         end
       end
       thread = Thread.new {
-        Thread.current[:results] ||= []
+        Thread.current[:results] = []
         Thread.current[:started_at] = Time.now
         Formatador.redisplay_progressbar(0, count, :label => name, :started_at => Thread.current[:started_at])
         for index in 1..count
@@ -72,17 +72,45 @@ end
 if __FILE__ == $0
 
   data = 'Content-Length: 100'
-  Tach.meter(1_000_000) do
+  Tach.meter(100_000) do
 
-    tach('regex') do
+    tach('regex 1') do
       header = data.match(/(.*):\s(.*)/)
       [$1, $2]
     end
 
-    tach('split') do
-      header = data.split(': ')
+    tach('regex 2') do
+      header = data.match(/(.*):\s(.*)/)
+      [$1, $2]
+    end
+
+    tach('regex 3') do
+      header = data.match(/(.*):\s(.*)/)
+      [$1, $2]
     end
 
   end
+
+require 'benchmark'
+Benchmark.bm do |bench|
+  bench.report('regex 1') do
+    100_000.times do
+      header = data.match(/(.*):\s(.*)/)
+      [$1, $2]
+    end
+  end
+  bench.report('regex 2') do
+    100_000.times do
+      header = data.match(/(.*):\s(.*)/)
+      [$1, $2]
+    end
+  end
+  bench.report('regex 3') do
+    100_000.times do
+      header = data.match(/(.*):\s(.*)/)
+      [$1, $2]
+    end
+  end
+end
 
 end
