@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "tach"
-    gem.summary = %Q{Shotgun benchmarking}
-    gem.description = %Q{Shotgun benchmarking with noticeable progress and pretty results.}
+    gem.summary = %Q{Simple benchmarking}
+    gem.description = %Q{Simple benchmarking with noticeable progress and pretty results.}
     gem.email = "wbeary@engineyard.com"
     gem.homepage = "http://github.com/geemus/tach"
     gem.authors = ["geemus (Wesley Beary)"]
