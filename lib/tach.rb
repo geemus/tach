@@ -8,6 +8,16 @@ module Tach
     Tach::Meter.new(times, &block)
   end
 
+  def self.tach(name, &block)
+    tach_start = Time.now
+    instance_eval(&block)
+    tach_finish = Time.now
+    duration = tach_finish.to_f - tach_start.to_f
+    Formatador.display_line
+    Formatador.display_line("[bold]#{name}[/] [light_black]#{format("%0.6f", duration)}[/]")
+    duration
+  end
+
   class Meter
 
     def initialize(times = 1, &block)
@@ -40,8 +50,9 @@ module Tach
         instance_eval(&benchmark)
       end
       tach_finish = Time.now
+      duration = tach_finish.to_f - tach_start.to_f
       Formatador.display_line
-      tach_finish - tach_start
+      duration
     end
 
   end
@@ -49,6 +60,10 @@ module Tach
 end
 
 if __FILE__ == $0
+
+  Tach.tach('sleep') do
+    sleep(1)
+  end
 
   data = 'Content-Length: 100'
   Tach.meter(100_000) do
