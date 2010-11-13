@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tach}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["geemus (Wesley Beary)"]
-  s.date = %q{2010-04-09}
+  s.date = %q{2010-11-13}
   s.description = %q{Simple benchmarking with noticeable progress and pretty results.}
   s.email = %q{wbeary@engineyard.com}
   s.extra_rdoc_files = [
@@ -17,14 +17,14 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
-    ".gitignore",
-    "README.rdoc",
-    "Rakefile",
-    "VERSION",
-    "lib/tach.rb",
-    "tach.gemspec",
-    "tests/tach_tests.rb",
-    "tests/tests_helper.rb"
+     ".gitignore",
+     "README.rdoc",
+     "Rakefile",
+     "VERSION",
+     "lib/tach.rb",
+     "tach.gemspec",
+     "tests/tach_tests.rb",
+     "tests/tests_helper.rb"
   ]
   s.homepage = %q{http://github.com/geemus/tach}
   s.rdoc_options = ["--charset=UTF-8"]
