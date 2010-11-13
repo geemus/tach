@@ -28,10 +28,17 @@ module Tach
       instance_eval(&block)
 
       Formatador.display_line
+      Formatador.display('[')
       data = []
       for name, block in @benchmarks
         data << { :tach => name, :total => format("%8.6f", run_tach(name, @times, &block)) }
+        unless [name, block] == @benchmarks.last
+          print(', ')
+          STDOUT.flush
+        end
       end
+      print("]\n\n")
+      STDOUT.flush
       Formatador.display_table(data, [:tach, :total])
       Formatador.display_line
     end
@@ -44,14 +51,14 @@ module Tach
 
     def run_tach(name, count, &benchmark)
       GC::start
-      Formatador.display_line(name)
+      print(name)
+      STDOUT.flush
       tach_start = Time.now
       for index in 1..count
         instance_eval(&benchmark)
       end
       tach_finish = Time.now
       duration = tach_finish.to_f - tach_start.to_f
-      Formatador.display_line
       duration
     end
 
