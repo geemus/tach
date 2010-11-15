@@ -39,6 +39,7 @@ module Tach
       end
       print("]\n\n")
       STDOUT.flush
+      data.sort! {|x,y| x[:total] <=> y[:total]}
       Formatador.display_table(data, [:tach, :total])
       Formatador.display_line
     end
