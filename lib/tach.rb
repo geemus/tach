@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'annals'
 require 'formatador'
 
 module Tach
