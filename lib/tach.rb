@@ -3,6 +3,10 @@ require 'formatador'
 
 module Tach
 
+  unless const_defined?(:VERSION)
+    VERSION = '0.0.6'
+  end
+
   def self.meter(times = 1, &block)
     Tach::Meter.new(times, &block)
   end
