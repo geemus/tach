@@ -23,6 +23,19 @@ Each tach should have a name, so you can recognize them in the results
 Then inside the tach block you should specify the code you care about comparing.
 The name of each tach will be displayed as it starts
 
+For things requiring more complex setup you can make them do their own iteration, for instance:
+
+  Tach.meter(4) do
+
+    tach('complex') do |count|
+      duration = rand
+      count.times do
+        sleep(duration)
+      end
+    end
+
+  end
+
 == Copyright
 
 (The MIT License)
