@@ -54,9 +54,13 @@ module Tach
       print(name)
       STDOUT.flush
       tach_start = Time.now
-      for index in 1..count
-        instance_eval(&benchmark)
+
+      if benchmark.arity == 0
+        count.times { benchmark.call }
+      else
+        benchmark.call(count)
       end
+
       tach_finish = Time.now
       duration = tach_finish.to_f - tach_start.to_f
       duration
@@ -90,6 +94,12 @@ if __FILE__ == $0
       [$1, $2]
     end
 
+    tach('regex 4') do |n|
+      n.times do
+        header = data.match(/(.*):\s(.*)/)
+        [$1, $2]
+      end
+    end
   end
 
 require 'benchmark'
