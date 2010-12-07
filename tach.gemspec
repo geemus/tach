@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'tach'
-  s.version           = '0.0.6'
-  s.date              = '2010-11-29'
+  s.version           = '0.0.7'
+  s.date              = '2010-12-07'
   s.rubyforge_project = 'tach'
 
   ## Make sure your summary is short. The description may be as long
@@ -58,7 +58,14 @@ Gem::Specification.new do |s|
   ## contents of your Git repository via the gemspec task. DO NOT REMOVE
   ## THE MANIFEST COMMENTS, they are used as delimiters by the task.
   # = MANIFEST =
-  s.files = %w[]
+  s.files = %w[
+    README.rdoc
+    Rakefile
+    lib/tach.rb
+    tach.gemspec
+    tests/tach_tests.rb
+    tests/tests_helper.rb
+  ]
   # = MANIFEST =
 
   ## Test files will be grabbed from the file list. Make sure the path glob

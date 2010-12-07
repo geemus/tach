@@ -4,7 +4,7 @@ require 'formatador'
 module Tach
 
   unless const_defined?(:VERSION)
-    VERSION = '0.0.6'
+    VERSION = '0.0.7'
   end
 
   def self.meter(times = 1, &block)
