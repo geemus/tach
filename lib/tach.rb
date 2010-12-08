@@ -6,7 +6,7 @@ module Tach
   STDOUT.sync = true
 
   unless const_defined?(:VERSION)
-    VERSION = '0.0.7'
+    VERSION = '0.0.8'
   end
 
   def self.meter(times = 1, &block)
