@@ -105,26 +105,4 @@ if __FILE__ == $0
     end
   end
 
-require 'benchmark'
-Benchmark.bm do |bench|
-  bench.report('regex 1') do
-    100_000.times do
-      header = data.match(/(.*):\s(.*)/)
-      [$1, $2]
-    end
-  end
-  bench.report('regex 2') do
-    100_000.times do
-      header = data.match(/(.*):\s(.*)/)
-      [$1, $2]
-    end
-  end
-  bench.report('regex 3') do
-    100_000.times do
-      header = data.match(/(.*):\s(.*)/)
-      [$1, $2]
-    end
-  end
-end
-
 end
