@@ -3,6 +3,8 @@ require 'formatador'
 
 module Tach
 
+  STDOUT.sync = true
+
   unless const_defined?(:VERSION)
     VERSION = '0.0.7'
   end
@@ -37,11 +39,9 @@ module Tach
         data << { :tach => name, :total => format("%8.6f", run_tach(name, @times, &block)) }
         unless [name, block] == @benchmarks.last
           print(', ')
-          STDOUT.flush
         end
       end
       print("]\n\n")
-      STDOUT.flush
       data.sort! {|x,y| x[:total].to_f <=> y[:total].to_f }
       Formatador.display_table(data, [:tach, :total])
       Formatador.display_line
@@ -56,7 +56,6 @@ module Tach
     def run_tach(name, count, &benchmark)
       GC::start
       print(name)
-      STDOUT.flush
       tach_start = Time.now
 
       if benchmark.arity == 0
