@@ -58,7 +58,7 @@ module Tach
       print(name)
       tach_start = Time.now
 
-      if benchmark.arity == 0
+      if benchmark.arity <= 0
         count.times { benchmark.call }
       else
         benchmark.call(count)
