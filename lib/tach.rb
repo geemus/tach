@@ -36,14 +36,34 @@ module Tach
       Formatador.display('[')
       data = []
       for name, block in @benchmarks
-        data << { :tach => name, :total => format("%8.6f", run_tach(name, @times, &block)) }
+        durations = run_tach(name, @times, &block)
+        total = durations.inject(0) {|sum, duration| sum + duration}
+        average = total.to_f / @times.to_f
+
+        # calculate standard deviation
+        deviation_squares = durations.map do |duration|
+          deviation = duration - average
+          deviation * deviation
+        end
+        deviation_squares_average = deviation_squares.inject(0) {|sum, deviation| sum + deviation} / deviation_squares.length.to_f
+        standard_deviation = Math.sqrt(deviation_squares_average)
+
+        data << {
+          :tach   => name,
+          :total  => format("%8.6f", total),
+          :min    => format("%8.6f", durations.min),
+          :avg    => format("%8.6f", average),
+          :max    => format("%8.6f", durations.max),
+          :stddev => format("%8.6f", standard_deviation)
+        }
+
         unless [name, block] == @benchmarks.last
           print(', ')
         end
       end
       print("]\n\n")
       data.sort! {|x,y| x[:total].to_f <=> y[:total].to_f }
-      Formatador.display_table(data, [:tach, :total])
+      Formatador.display_table(data, [:tach, :total, :min, :avg, :max, :stddev])
       Formatador.display_line
     end
 
@@ -56,17 +76,23 @@ module Tach
     def run_tach(name, count, &benchmark)
       GC::start
       print(name)
-      tach_start = Time.now
+      durations = []
 
       if benchmark.arity <= 0
-        count.times { benchmark.call }
+        count.times do
+          tach_start = Time.now
+          benchmark.call
+          tach_finish = Time.now
+          durations << tach_finish.to_f - tach_start.to_f
+        end
       else
+        tach_start = Time.now
         benchmark.call(count)
+        tach_finish = Time.now
+        durations << tach_finish.to_f - tach_start.to_f
       end
 
-      tach_finish = Time.now
-      duration = tach_finish.to_f - tach_start.to_f
-      duration
+      durations
     end
 
   end
